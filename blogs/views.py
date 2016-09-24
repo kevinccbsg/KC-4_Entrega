@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from django.views.generic import View
 from django.http import HttpResponse
-from blogs.models import Blog, Post
 from django.contrib.auth.models import User
+
+from blogs.models import Blog, Post
+from blogs.forms import PostForm
 
 
 # Create your views here.
@@ -96,11 +98,39 @@ class PostDetailView(View):
 
 
 class CreatePostView(View):
-    '''
-    Creation of Post
-    :params: request PostData
-    :return: OK or not OK saved data
-    '''
 
     def get(self, request):
-        return HttpResponse('Creation Post')
+        '''
+        Post Form render. 
+        If data are correct the form save the content if not sends a feedback.
+        User must logged
+        '''
+        success_message = ''
+        post = Post()
+        post_form = PostForm()
+        # Template context
+        context = {
+            'form': post_form,
+            'message': success_message
+        }
+        return render(request, 'blogs/post-create.html', context)
+
+    def post_creation(self, request):
+        '''
+        Post Form render. 
+        If data are correct the form save the content if not sends a feedback.
+        User must logged
+        :param: request
+        '''
+        success_message = ''
+        post_instance = PostForm()
+        post_form = PostForm(request.POST, instance=post_instance)
+        if post_form.is_valid():
+            new_post = post_form.save()
+            post_form = PostForm()
+            success_message = 'Post succesfully created'
+        context = {
+            'form': post_form,
+            'message': success_message
+        }
+        return render(request, 'blogs/post-create.html', context)
