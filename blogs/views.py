@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.views.generic import View
 from django.http import HttpResponse
 from django.contrib.auth.models import User
-
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from blogs.models import Blog, Post
 from blogs.forms import PostForm
 
@@ -19,6 +20,7 @@ class BlogsView(View):
         in a templates (Username)
         '''
         blogs = Blog.objects.all().order_by('?')
+        print(blogs)
         context = {'blogs_list': blogs}
         return render(request, 'blogs/blogs-home.html', context)
 
@@ -86,7 +88,7 @@ class PostDetailView(View):
                 if len(posts) == 0:
                     error = 'These post does\'t not exists'
                 else:
-                    post = post[0]
+                    post = posts[0]
                     blog_username = username
 
         # Template context
@@ -99,6 +101,7 @@ class PostDetailView(View):
 
 class CreatePostView(View):
 
+    @method_decorator(login_required())
     def get(self, request):
         '''
         Post Form render. 
@@ -115,16 +118,22 @@ class CreatePostView(View):
         }
         return render(request, 'blogs/post-create.html', context)
 
-    def post_creation(self, request):
+    @method_decorator(login_required())
+    def post(self, request):
         '''
         Post Form render. 
         If data are correct the form save the content if not sends a feedback.
         User must logged
         :param: request
         '''
-        success_message = ''
-        post_instance = PostForm()
-        post_form = PostForm(request.POST, instance=post_instance)
+        # blog_with_user = Blog(owner=request.user)
+        blog_with_user = Blog.objects.filter(owner=request.user)
+        if len(blog_with_user) == 0:
+            return HttpResponse('You have to create a blog first')
+        else:
+            post_with_blog = Post(blog=blog_with_user[0])
+            success_message = ''
+            post_form = PostForm(request.POST, instance=post_with_blog)
         if post_form.is_valid():
             new_post = post_form.save()
             post_form = PostForm()
