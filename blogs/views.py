@@ -32,8 +32,11 @@ class PostsView(View):
         owner = User.objects.filter(username=username)
         blog = Blog.objects.filter(owner=owner).select_related('owner')
         posts = Post.objects.select_related().filter(blog=blog)
-        context = {'post_list': posts}
-       	return render(request, 'blogs/blog-posts.html', context);
+        context = {
+            'post_list': posts,
+            'username': username
+        }
+        return render(request, 'blogs/blog-posts.html', context)
 
 
 class PostDetailView(View):
@@ -44,7 +47,11 @@ class PostDetailView(View):
     '''
 
     def get(self, request, username, pk):
-        return HttpResponse('Post detail')
+        owner = User.objects.filter(username=username)
+        blog = Blog.objects.filter(owner=owner).select_related('owner')
+        post = Post.objects.filter(blog=blog, pk=pk)
+        context = {'post': post[0]}
+        return render(request, 'blogs/post-detail.html', context)
 
 
 class CreatePostView(View):

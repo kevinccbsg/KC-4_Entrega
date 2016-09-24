@@ -8,16 +8,16 @@
 	<h1>Todos los Post de un user</h1>
 	{% if  post_list|length > 0 %}
 		{% for post in post_list %}
-			<a href="#">
+			<a href="{% url 'post_user_detail' username post.pk %}">
 				<hr>
 				<h3><strong>{{ post.title }}</strong></h3>
-				<img src="{{ post.URL_media }}" alt="">
+				<img src="{{ post.URL_media }}" width="600" alt="">
 				<hr>
 				<br>
 				<br>
 			</a>
 		{% endfor %}
-
+	<a href="{% url 'blogs_list' %}">Volver a la home</a>
 	{% else %}
 		<p>No hay Post del usuario</p>
 		<a href="{% url 'blogs_list' %}">Volver a la home</a>
