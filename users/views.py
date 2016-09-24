@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
-from users.forms import LoginForm
+from users.forms import LoginForm, SignUpForm
 from django.views import View
 # Create your views here.
 
@@ -9,12 +9,14 @@ class LoginView(View):
 
     def get(self, request):
         '''
-        Render Login view
+        Display logout template
         '''
         if request.user.is_authenticated():
             return redirect(request.GET.get('next', 'blogs/'))
         error_message = ''
         login_form = LoginForm()
+
+        # Template context
         context = {
             'error': error_message,
             'form': login_form
@@ -23,7 +25,7 @@ class LoginView(View):
 
     def post(self, request):
         '''
-        Render Login view Send information to log
+        Display Login view Send information to log
         '''
         error_message = ""
         login_form = LoginForm(request.POST)
@@ -42,6 +44,7 @@ class LoginView(View):
         else:
             error_message = 'Username or password are wrong'
 
+        # Template context
         context = {
             'error': error_message,
             'form': login_form
@@ -53,9 +56,28 @@ class LogoutView(View):
 
     def get(self, request):
         '''
-        Creacion del logout
+        Display logout template
         '''
         if request.user.is_authenticated():
             django_logout(request)
 
         return redirect('/login')
+
+
+class SignUpView(View):
+
+    def get(self, request):
+        '''
+        Display Signup template
+        '''
+        if request.user.is_authenticated():
+            return redirect(request.GET.get('next', 'blogs/'))
+        error_message = ''
+        signup_form = SignUpForm()
+
+        # Template context
+        context = {
+            'form': signup_form,
+            'error': error_message
+        }
+        return render(request, 'users/signup.html', context)

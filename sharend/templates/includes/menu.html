@@ -3,6 +3,7 @@
 <a href="{% url 'creation_post' %}">New Post</a> | 
 <a href="{% url 'users_logout' %}">Log out</a>  
 {% else %}
+<a href="{% url 'signup' %}">Signup</a>
 <a href="{% url 'users_login' %}">Login</a>
 {% endif %}
 <hr>
