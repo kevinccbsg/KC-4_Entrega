@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import View
 from django.http import HttpResponse
 from blogs.models import Blog, Post
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -28,7 +29,11 @@ class PostsView(View):
     '''
 
     def get(self, request, username):
-        return HttpResponse('posts views')
+        owner = User.objects.filter(username=username)
+        blog = Blog.objects.filter(owner=owner).select_related('owner')
+        posts = Post.objects.select_related().filter(blog=blog)
+        context = {'post_list': posts}
+       	return render(request, 'blogs/blog-posts.html', context);
 
 
 class PostDetailView(View):

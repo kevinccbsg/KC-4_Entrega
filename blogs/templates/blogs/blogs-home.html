@@ -8,7 +8,7 @@
 	<h1>Todos los blogs</h1>
 	{% if  blogs_list|length > 0 %}
 		{% for blog in blogs_list %}
-			{{ blog.title }}
+			{{ blog.title }} + {{ blog.pk }}
 			<a href="{% url 'posts_of_user_blog' blog.owner %}">Ver detalle</a>
 		{% endfor %}
 
