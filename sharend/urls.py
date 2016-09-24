@@ -15,13 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from blogs.urls import urls as blogs_url
+from blogs import urls as blogs_url
+from blogs.views import CreatePostView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     # Blogs URL
     url(r'^blogs/', include(blogs_url)),
-    #url(r'^$', , name='creation_blog'),
-    url(r'^$', , name='creation_post'),
+    # url(r'^$', , name='creation_blog'),
+    url(r'^new-post$', CreatePostView.as_view(), name='creation_post'),
 ]
