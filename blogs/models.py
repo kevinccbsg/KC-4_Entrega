@@ -14,6 +14,8 @@ class Category(models.Model):
     '''
     title = models.CharField(max_length=15)
 
+    def __str__(self):
+        return self.title
 
 
 class Blog(models.Model):
@@ -25,6 +27,8 @@ class Blog(models.Model):
     title = models.CharField(max_length=30)
     owner = models.ForeignKey(User)
 
+    def __str__(self):
+        return self.title
 
 
 class Post(models.Model):
@@ -46,3 +50,5 @@ class Post(models.Model):
     category = models.ManyToManyField(Category)
     blog = models.ForeignKey(Blog)
 
+    def __str__(self):
+        return self.title
