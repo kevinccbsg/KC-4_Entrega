@@ -1,19 +1,22 @@
 from django.shortcuts import render
 from django.views.generic import View
 from django.http import HttpResponse
+from blogs.models import Blog, Post
 
 
 # Create your views here.
 class BlogsView(View):
-    '''
-    Get all blogs
-    :params: request
-    :return: All blogs with name and identifier of user 
-    in a templates (Username)
-    '''
 
     def get(self, request):
-        return HttpResponse('blogs view')
+        '''
+        Get all blogs
+        :params: request
+        :return: All blogs with name and identifier of user 
+        in a templates (Username)
+        '''
+        blogs = Blog.objects.all().order_by('?')
+        context = {'blogs_list': blogs}
+        return render(request, 'blogs/blogs-home.html', context)
 
 
 class PostsView(View):
