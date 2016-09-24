@@ -6,14 +6,20 @@
 </head>
 <body>
 	<h1>Detalle POST</h1>
-	<h2>{{ post.title }}</h2>
-	<p><i>{{ post.introduction_text }}</i></p>
-	<p>{{ post.body_text }}</p>
-	<ul>
-		{% for category in post.category.all %}
-			<li>{{ category }}</li>
-		{% endfor %}
-	</ul>
+	{% if  error == None %}
+		<h2>{{ post.title }}</h2>
+		<p><i>{{ post.introduction_text }}</i></p>
+		<p>{{ post.body_text }}</p>
+		<ul>
+			{% for category in post.category.all %}
+				<li>{{ category }}</li>
+			{% endfor %}
+		</ul>
+		<br>
+	{% else %}
+		{{ error }}
+		<br>
+	{% endif %}
 	<a href="{% url 'blogs_list' %}">Volver a la home</a>
 </body>
 </html>

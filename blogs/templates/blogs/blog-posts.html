@@ -6,7 +6,7 @@
 </head>
 <body>
 	<h1>Todos los Post de un user</h1>
-	{% if  post_list|length > 0 %}
+	{% if  error == None %}
 		{% for post in post_list %}
 			<a href="{% url 'post_user_detail' username post.pk %}">
 				<hr>
@@ -19,7 +19,7 @@
 		{% endfor %}
 	<a href="{% url 'blogs_list' %}">Volver a la home</a>
 	{% else %}
-		<p>No hay Post del usuario</p>
+		<p>{{ error }}</p>
 		<a href="{% url 'blogs_list' %}">Volver a la home</a>
 	{% endif %}
 </body>

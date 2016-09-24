@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 
 
 # Create your views here.
+
 class BlogsView(View):
 
     def get(self, request):
@@ -29,12 +30,30 @@ class PostsView(View):
     '''
 
     def get(self, request, username):
+        # Context variables
+        error = None
+        posts = ''
+        blog_username = ''
+
+        # Actions
         owner = User.objects.filter(username=username)
-        blog = Blog.objects.filter(owner=owner).select_related('owner')
-        posts = Post.objects.select_related().filter(blog=blog)
+        if len(owner) == 0:
+            error = 'The user you look for doesn\'t match with our Database'
+        else:
+            blog = Blog.objects.filter(owner=owner).select_related('owner')
+            if len(blog) == 0:
+                error = 'The user hasn\'t got any blog yet'
+            else:
+                posts = Post.objects.select_related().filter(blog=blog)
+                blog_username = username
+                if len(posts) == 0:
+                    error = 'The blog hasn\'t got any post yet'
+
+        # Tempalte Context
         context = {
             'post_list': posts,
-            'username': username
+            'username': username,
+            'error': error
         }
         return render(request, 'blogs/blog-posts.html', context)
 
@@ -47,10 +66,32 @@ class PostDetailView(View):
     '''
 
     def get(self, request, username, pk):
+        # Context Variables
+        post = ''
+        error = None
+        blog_username = ''
+
+        # Actions
         owner = User.objects.filter(username=username)
-        blog = Blog.objects.filter(owner=owner).select_related('owner')
-        post = Post.objects.filter(blog=blog, pk=pk)
-        context = {'post': post[0]}
+        if len(owner) == 0:
+            error = 'The user you look for doesn\'t match with our Database'
+        else:
+            blog = Blog.objects.filter(owner=owner).select_related('owner')
+            if len(blog) == 0:
+                error = 'The user hasn\'t got any blog yet'
+            else:
+                posts = Post.objects.select_related().filter(blog=blog, pk=pk)
+                if len(posts) == 0:
+                    error = 'These post does\'t not exists'
+                else:
+                    post = post[0]
+                    blog_username = username
+
+        # Template context
+        context = {
+            'post': post,
+            'error': error
+        }
         return render(request, 'blogs/post-detail.html', context)
 
 
