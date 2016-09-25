@@ -1,12 +1,15 @@
 from rest_framework.permissions import BasePermission
 
 
-class UserPermision(BasePermission):
+__author__ = 'kevinccbsg'
+
+
+class UserPermission(BasePermission):
 
     def has_permission(self, request, view):
 
         from users.api import UserDetailAPI
-        if request.method == 'POST':
+        if request.method == "POST":
             return True
         if request.user.is_superuser:
             return True
@@ -14,5 +17,6 @@ class UserPermision(BasePermission):
             return True
         return False
 
-    def has_objects_permission(self, request, view, obj):
-    	return request.user.is_superuseror or request.user == obj
+    def has_object_permission(self, request, view, obj):
+
+        return request.user.is_superuser or request.user == obj

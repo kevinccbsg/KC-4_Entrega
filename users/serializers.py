@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+
 __author__ = 'kevinccbsg'
 
 
@@ -10,7 +11,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'first_name', 'last_name',
                   'username', 'password', 'email',)
-        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = User(
@@ -24,13 +24,15 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
     def validate_username(self, username):
-        if User.objects.filter(username=username).exists():
+        if (self.instance is None or self.instance.username != username) \
+        and User.objects.filter(username=username).exists():
             raise ValidationError(
                 "El nombre de esta usuario {0} ya está siendo utilizado".format(username))
         return username
 
     def validate_email(self, email):
-        if User.objects.filter(email=email).exists():
+        if (self.instance is None or self.instance.email != email) \
+                and User.objects.filter(email=email).exists():
             raise ValidationError(
                 "Este email {0} ya está siendo utilizado".format(email))
         return email
