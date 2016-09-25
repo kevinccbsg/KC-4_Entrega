@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'sharend',
     'blogs',
     'users',
-    'restframework',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
