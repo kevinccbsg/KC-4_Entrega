@@ -18,12 +18,16 @@ from django.contrib import admin
 from blogs import urls as blogs_url
 from blogs.views import CreatePostView
 from users import urls as users_url
+from blogs.api import BlogListAPI
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     # Blogs URL
     url(r'^blogs/', include(blogs_url)),
+    # API Blog
+    url(r'^api/1.0/blogs/$', BlogListAPI.as_view(), name='blogs_api_view'),
+
     # url(r'^$', , name='creation_blog'),
     url(r'^createpost/$', CreatePostView.as_view(), name='creation_post'),
 
