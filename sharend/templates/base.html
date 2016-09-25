@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>{% block title %}Share and find stories | Sharend{% endblock title %}</title>
+</head>
+<body>
+	<h1><strong>Sharend Website</strong></h1>
+	{% include "includes/menu.html" %}
+	<div style="max-width:992px; margin: 0 auto;">
+		{% block body %}
+		{% endblock body %}
+	</div>
+</body>
+</html>

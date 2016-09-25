@@ -17,6 +17,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from blogs import urls as blogs_url
 from blogs.views import CreatePostView
+from users import urls as users_url
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -24,5 +25,8 @@ urlpatterns = [
     # Blogs URL
     url(r'^blogs/', include(blogs_url)),
     # url(r'^$', , name='creation_blog'),
-    url(r'^new-post$', CreatePostView.as_view(), name='creation_post'),
+    url(r'^createpost/$', CreatePostView.as_view(), name='creation_post'),
+
+    # Users URL
+    url(r'', include(users_url)),
 ]
